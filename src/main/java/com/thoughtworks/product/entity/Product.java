@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @ApiModel(value = "Product", description = "Product resource representation")
 @Entity
@@ -26,6 +27,14 @@ public class Product {
   @Column(nullable = false)
   private String description;
 
+  public Product() {
+  }
+
+  public Product(@Size(max = 100) final String name, @Size(max = 300) final String description) {
+    this.name = name;
+    this.description = description;
+  }
+
   public long getId() {
     return id;
   }
@@ -36,6 +45,23 @@ public class Product {
 
   public String getDescription() {
     return description;
+  }
+
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    final Product product = (Product) o;
+    return id == product.id &&
+      Objects.equals(name, product.name) &&
+      Objects.equals(description, product.description);
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(id);
   }
 
   @Override
